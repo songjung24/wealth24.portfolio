@@ -257,7 +257,7 @@
 <div class="content">
 
   <!-- ===== CORE PORT ===== -->
-  <div class="panel-screen active" id="screen-core">
+  <div class="panel-screen" id="screen-core">
     <div class="screen-head">
       <div>
         <h1 class="screen-title">Core Port <span style="color:var(--coral)" id="core-client">: —</span></h1>
@@ -301,10 +301,48 @@
   </div>
 
   <!-- ===== WEALTH 24 MODEL ===== -->
-  <div class="panel-screen" id="screen-model">
-    <div class="screen-head"><div>
+  <div class="panel-screen active" id="screen-model">
+    <div class="screen-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px"><div>
       <h1 class="screen-title">Wealth 24 Model</h1>
-    </div></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button onclick="openSavePanel()" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        บันทึก / โหลด
+      </button>
+    </div>
+    </div>
+
+    <!-- Save/Load Panel -->
+    <div id="save-panel" style="display:none;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <span style="font-size:16px;font-weight:800">💾 บันทึก / โหลด Model</span>
+        <button onclick="closeSavePanel()" style="padding:4px 10px;border:1px solid var(--line);background:transparent;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted)">✕ ปิด</button>
+      </div>
+
+      <!-- Save new -->
+      <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+        <input id="save-name-input" placeholder="ชื่อ snapshot เช่น Model พ.ค.68, Conservative, ปรับพอร์ตใหม่..."
+          style="flex:1;min-width:200px;padding:9px 14px;border:1px solid var(--line);border-radius:10px;font-size:13px;background:var(--card);color:var(--fg)"
+          onkeydown="if(event.key==='Enter') saveModelSnapshot()">
+        <button onclick="saveModelSnapshot()" style="padding:9px 18px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">
+          💾 บันทึกตอนนี้
+        </button>
+      </div>
+
+      <!-- Saved list -->
+      <div id="save-list"></div>
+
+      <!-- Import/Export -->
+      <div style="border-top:1px solid var(--line);padding-top:14px;margin-top:4px;display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="exportSaves()" style="padding:7px 14px;border:1px solid var(--line);background:transparent;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted)">
+          ⬇ Export JSON
+        </button>
+        <label style="padding:7px 14px;border:1px solid var(--line);background:transparent;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted)">
+          ⬆ Import JSON <input type="file" accept=".json" onchange="importSaves(event)" style="display:none">
+        </label>
+      </div>
+    </div>
     <div class="panel" style="background:linear-gradient(135deg, rgba(111,158,135,0.16), rgba(155,191,176,0.08));border-color:rgba(111,158,135,0.22);border-radius:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:36px;align-items:center;padding:36px">
       <div style="display:flex;justify-content:center"><div style="position:relative;width:300px;height:300px;max-width:100%">
         <div id="model-donut"></div>
@@ -384,6 +422,257 @@
       <thead><tr><th>☆</th><th>รหัส</th><th>ชื่อกองทุน</th><th>บลจ.</th><th>ธีม</th><th>Benchmark</th><th>A/P</th><th>NAV</th><th>วันที่</th><th>YTD</th><th>3M</th><th>6M</th><th>1Y</th><th>3Y</th><th>5Y</th></tr></thead>
       <tbody id="tracker-tbody"><tr><td colspan="15" style="text-align:center;padding:32px;color:var(--muted)"><span class="spinner"></span> กำลังโหลด...</td></tr></tbody>
     </table></div></div>
+  </div>
+
+  <!-- ===== PHILOSOPHY ===== -->
+  <div class="panel-screen" id="screen-philosophy">
+    <div class="screen-head">
+      <div>
+        <h1 class="screen-title">ปรัชญาการลงทุน</h1>
+        <div class="screen-sub">Wealth24 Investment Philosophy · กรอบความคิดและเป้าหมายของพอร์ตโมเดล</div>
+      </div>
+    </div>
+
+    <!-- 5 Pillars -->
+    <div class="panel" style="border-radius:24px;padding:28px 32px;margin-bottom:20px">
+      <div style="font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px">5 หลักการพื้นฐาน</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+        <div style="background:rgba(63,107,88,.08);border-radius:16px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:8px">🛡️</div>
+          <div style="font-size:14px;font-weight:800;color:#3f6b58;margin-bottom:4px">Wealth Preservation</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">รักษาเงินต้น — หลีกเลี่ยงการสูญเสียถาวร ให้ความสำคัญกับ downside ก่อน upside</div>
+        </div>
+        <div style="background:rgba(63,107,88,.08);border-radius:16px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:8px">📈</div>
+          <div style="font-size:14px;font-weight:800;color:#3f6b58;margin-bottom:4px">Steady Compounding</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">เติบโตสม่ำเสมอ — ผลตอบแทนทบต้นต่อเนื่อง ดีกว่าเพิ่งสูงแล้วหายไป</div>
+        </div>
+        <div style="background:rgba(63,107,88,.08);border-radius:16px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:8px">🌍</div>
+          <div style="font-size:14px;font-weight:800;color:#3f6b58;margin-bottom:4px">Global Diversification</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">กระจายทั่วโลก — ไม่พึ่งพาตลาดหรืออุตสาหกรรมเดียว ลดความเสี่ยงเฉพาะที่</div>
+        </div>
+        <div style="background:rgba(63,107,88,.08);border-radius:16px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:8px">⚖️</div>
+          <div style="font-size:14px;font-weight:800;color:#3f6b58;margin-bottom:4px">Reasonable Valuation</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">ไม่ไล่ซื้อของแพง — เลือกกองทุนที่ราคาสมเหตุสมผล ไม่ซื้อตามกระแส</div>
+        </div>
+        <div style="background:rgba(63,107,88,.08);border-radius:16px;padding:18px 20px">
+          <div style="font-size:22px;margin-bottom:8px">🧘</div>
+          <div style="font-size:14px;font-weight:800;color:#3f6b58;margin-bottom:4px">Behavior First</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">ออกแบบให้ถือได้จริง — พอร์ตที่ดีต้องทนต่อ volatility และอารมณ์ตลาดได้</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Targets + Asset Allocation -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:20px">
+      <div class="panel" style="border-radius:20px;padding:24px 28px">
+        <div style="font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px">เป้าหมายพอร์ต</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px;border-bottom:1px solid var(--line)">
+            <span style="font-size:13px;color:var(--muted)">ผลตอบแทนเฉลี่ย</span>
+            <span style="font-size:15px;font-weight:800;color:#3f6b58">8–10% / ปี</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px;border-bottom:1px solid var(--line)">
+            <span style="font-size:13px;color:var(--muted)">เงินปันผล / Cash Flow</span>
+            <span style="font-size:15px;font-weight:800;color:#b45309">2–4%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px;border-bottom:1px solid var(--line)">
+            <span style="font-size:13px;color:var(--muted)">Max Drawdown (วิกฤต)</span>
+            <span style="font-size:15px;font-weight:800;color:#dc2626">≤ −25%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px;border-bottom:1px solid var(--line)">
+            <span style="font-size:13px;color:var(--muted)">ระยะลงทุน</span>
+            <span style="font-size:15px;font-weight:800;color:var(--fg)">10 ปี +</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span style="font-size:13px;color:var(--muted)">Rebalance</span>
+            <span style="font-size:13px;font-weight:700;color:var(--fg);text-align:right;max-width:55%">ทุก 6 เดือน หรือเบี่ยงเบน &gt;5%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="border-radius:20px;padding:24px 28px">
+        <div style="font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px">Asset Allocation เป้าหมาย</div>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <div style="width:8px;height:8px;border-radius:50%;background:#3f6b58;flex-shrink:0"></div>
+            <div style="flex:1;color:var(--fg)">Global Equity</div>
+            <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#3f6b58;width:45%"></div></div>
+            <div style="width:36px;text-align:right;font-weight:800;color:#3f6b58">45%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <div style="width:8px;height:8px;border-radius:50%;background:#6f9e87;flex-shrink:0"></div>
+            <div style="flex:1;color:var(--fg)">US Equity</div>
+            <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#6f9e87;width:15%"></div></div>
+            <div style="width:36px;text-align:right;font-weight:800;color:#6f9e87">15%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <div style="width:8px;height:8px;border-radius:50%;background:#9bbfb0;flex-shrink:0"></div>
+            <div style="flex:1;color:var(--fg)">Thailand Dividend</div>
+            <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#9bbfb0;width:15%"></div></div>
+            <div style="width:36px;text-align:right;font-weight:800;color:#9bbfb0">15%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <div style="width:8px;height:8px;border-radius:50%;background:#cdbd9a;flex-shrink:0"></div>
+            <div style="flex:1;color:var(--fg)">Global Multi Asset</div>
+            <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#cdbd9a;width:10%"></div></div>
+            <div style="width:36px;text-align:right;font-weight:800;color:#cdbd9a">10%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <div style="width:8px;height:8px;border-radius:50%;background:#e8a85c;flex-shrink:0"></div>
+            <div style="flex:1;color:var(--fg)">Gold</div>
+            <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#e8a85c;width:5%"></div></div>
+            <div style="width:36px;text-align:right;font-weight:800;color:#e8a85c">5%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <div style="width:8px;height:8px;border-radius:50%;background:#a3c4bc;flex-shrink:0"></div>
+            <div style="flex:1;color:var(--fg)">Short Bond</div>
+            <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#a3c4bc;width:5%"></div></div>
+            <div style="width:36px;text-align:right;font-weight:800;color:#a3c4bc">5%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <div style="width:8px;height:8px;border-radius:50%;background:#ccd6d2;flex-shrink:0"></div>
+            <div style="flex:1;color:var(--fg)">Cash</div>
+            <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#ccd6d2;width:5%"></div></div>
+            <div style="width:36px;text-align:right;font-weight:800;color:#888">5%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core Philosophy Buckets -->
+    <div class="panel" style="border-radius:24px;padding:28px 32px;margin-bottom:20px">
+      <div style="font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px">โครงสร้างพอร์ต (Portfolio Buckets)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+        <div style="border:1.5px solid rgba(63,107,88,.25);border-radius:16px;padding:20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <div style="background:#3f6b58;color:#fff;border-radius:10px;padding:6px 12px;font-size:13px;font-weight:800">Core</div>
+            <div style="font-size:22px;font-weight:900;color:#3f6b58">60%</div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">ซื้อธุรกิจที่ดีที่สุดของโลก · ไม่ขายเพราะข่าว · ถือยาว</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px">
+            <span style="background:rgba(63,107,88,.1);color:#3f6b58;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">MSCI World</span>
+            <span style="background:rgba(63,107,88,.1);color:#3f6b58;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">Global Quality</span>
+            <span style="background:rgba(63,107,88,.1);color:#3f6b58;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">S&amp;P 500</span>
+          </div>
+        </div>
+        <div style="border:1.5px solid rgba(180,83,9,.2);border-radius:16px;padding:20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <div style="background:#b45309;color:#fff;border-radius:10px;padding:6px 12px;font-size:13px;font-weight:800">Income</div>
+            <div style="font-size:22px;font-weight:900;color:#b45309">20%</div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">สร้าง Cash Flow · ลดความผันผวน · รับเงินปันผลสม่ำเสมอ</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px">
+            <span style="background:rgba(180,83,9,.1);color:#b45309;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">TISCOHD</span>
+            <span style="background:rgba(180,83,9,.1);color:#b45309;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">Global Income</span>
+            <span style="background:rgba(180,83,9,.1);color:#b45309;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">Multi Asset</span>
+          </div>
+        </div>
+        <div style="border:1.5px solid rgba(99,102,241,.25);border-radius:16px;padding:20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <div style="background:#6366f1;color:#fff;border-radius:10px;padding:6px 12px;font-size:13px;font-weight:800">Opportunity</div>
+            <div style="font-size:22px;font-weight:900;color:#6366f1">10%</div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">ลงทุนตามธีมเติบโต · คัดกรองอย่างมีวินัย · ไม่ไล่ราคา</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px">
+            <span style="background:rgba(99,102,241,.1);color:#6366f1;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">AI</span>
+            <span style="background:rgba(99,102,241,.1);color:#6366f1;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">Healthcare</span>
+            <span style="background:rgba(99,102,241,.1);color:#6366f1;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">India</span>
+            <span style="background:rgba(99,102,241,.1);color:#6366f1;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">Infrastructure</span>
+          </div>
+        </div>
+        <div style="border:1.5px solid rgba(220,38,38,.2);border-radius:16px;padding:20px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <div style="background:#dc2626;color:#fff;border-radius:10px;padding:6px 12px;font-size:13px;font-weight:800">Protection</div>
+            <div style="font-size:22px;font-weight:900;color:#dc2626">10%</div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">ป้องกันพอร์ตในช่วงวิกฤต · ลดสหสัมพันธ์ · รักษาสภาพคล่อง</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px">
+            <span style="background:rgba(220,38,38,.1);color:#dc2626;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">Gold</span>
+            <span style="background:rgba(220,38,38,.1);color:#dc2626;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">Cash</span>
+            <span style="background:rgba(220,38,38,.1);color:#dc2626;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700">Short Bond</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- W24 Fund Score -->
+    <div class="panel" style="border-radius:24px;padding:28px 32px;margin-bottom:20px">
+      <div style="font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">W24 Fund Score</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:18px">เกณฑ์คัดเลือกกองทุนเข้าพอร์ต — ถ่วงน้ำหนักตามความสำคัญ</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px">
+        <div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px">
+              <div style="flex:1;color:var(--fg)">Risk-adjusted Return</div>
+              <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#3f6b58;width:20%"></div></div>
+              <div style="width:32px;text-align:right;font-weight:800;color:#3f6b58">20%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px">
+              <div style="flex:1;color:var(--fg)">Maximum Drawdown</div>
+              <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#3f6b58;width:20%"></div></div>
+              <div style="width:32px;text-align:right;font-weight:800;color:#3f6b58">20%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px">
+              <div style="flex:1;color:var(--fg)">Volatility</div>
+              <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#3f6b58;width:15%"></div></div>
+              <div style="width:32px;text-align:right;font-weight:800;color:#3f6b58">15%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px">
+              <div style="flex:1;color:var(--fg)">Sharpe Ratio</div>
+              <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#3f6b58;width:15%"></div></div>
+              <div style="width:32px;text-align:right;font-weight:800;color:#3f6b58">15%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px">
+              <div style="flex:1;color:var(--fg)">Income Quality</div>
+              <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#3f6b58;width:10%"></div></div>
+              <div style="width:32px;text-align:right;font-weight:800;color:#3f6b58">10%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px">
+              <div style="flex:1;color:var(--fg)">Diversification</div>
+              <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#3f6b58;width:10%"></div></div>
+              <div style="width:32px;text-align:right;font-weight:800;color:#3f6b58">10%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px">
+              <div style="flex:1;color:var(--fg)">Fund Manager</div>
+              <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#3f6b58;width:5%"></div></div>
+              <div style="width:32px;text-align:right;font-weight:800;color:#3f6b58">5%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px">
+              <div style="flex:1;color:var(--fg)">AUM &amp; Liquidity</div>
+              <div style="width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden"><div style="height:100%;background:#3f6b58;width:5%"></div></div>
+              <div style="width:32px;text-align:right;font-weight:800;color:#3f6b58">5%</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:12px">ระดับ Rating</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(34,197,94,.1);border-radius:10px;border-left:3px solid #16a34a">
+              <span style="font-size:14px">🟢</span><span style="font-weight:800;font-size:13px;color:#16a34a;width:44px">AAA</span><span style="font-size:12px;color:var(--muted)">Core Portfolio — กองหลัก ถือตลอด</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(34,197,94,.07);border-radius:10px;border-left:3px solid #22c55e">
+              <span style="font-size:14px">🟢</span><span style="font-weight:800;font-size:13px;color:#22c55e;width:44px">AA</span><span style="font-size:12px;color:var(--muted)">Strong Buy — แนะนำซื้อเพิ่ม</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(234,179,8,.1);border-radius:10px;border-left:3px solid #ca8a04">
+              <span style="font-size:14px">🟡</span><span style="font-weight:800;font-size:13px;color:#ca8a04;width:44px">A</span><span style="font-size:12px;color:var(--muted)">Buy — เหมาะสม ซื้อได้</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(234,88,12,.1);border-radius:10px;border-left:3px solid #ea580c">
+              <span style="font-size:14px">🟠</span><span style="font-weight:800;font-size:13px;color:#ea580c;width:44px">BBB</span><span style="font-size:12px;color:var(--muted)">Tactical — ถือได้ตามสถานการณ์</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(220,38,38,.08);border-radius:10px;border-left:3px solid #dc2626">
+              <span style="font-size:14px">🔴</span><span style="font-weight:800;font-size:13px;color:#dc2626;width:44px">Watch</span><span style="font-size:12px;color:var(--muted)">ต้องติดตาม — พิจารณาลดสัดส่วน</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:16px 20px;border-radius:12px;background:rgba(63,107,88,.06);border:1px solid rgba(63,107,88,.15);font-size:12px;color:var(--muted);line-height:1.7">
+      ⚠️ ข้อมูลนี้จัดทำเพื่อการอ้างอิงส่วนตัวเท่านั้น ไม่ใช่คำแนะนำการลงทุน ผลตอบแทนในอดีตไม่ได้รับประกันผลในอนาคต การลงทุนมีความเสี่ยง ผู้ลงทุนควรศึกษาข้อมูลให้ครบถ้วนก่อนตัดสินใจ
+    </div>
   </div>
 
 </div>
@@ -527,6 +816,88 @@ function renderStackedBarFromItems(items, colors, labelMap) {
   `;
 }
 
+// ── Weight Editor ────────────────────────────────────────────────────────────
+function parseWeightStr(str) {
+  if (!str || str === '—') return [];
+  if (!str.includes(':')) return [{ key: str, pct: 100 }];
+  return str.split('/').map(s => {
+    const [k, v] = s.split(':');
+    return { key: (k || '').trim(), pct: parseFloat(v) || 0 };
+  }).filter(x => x.key && x.pct !== 0);
+}
+
+function openWeightEditor(code, type) {
+  document.getElementById(`wd-${code}-${type}`).style.display = 'none';
+  document.getElementById(`we-${code}-${type}`).style.display = 'block';
+}
+function closeWeightEditor(code, type) {
+  document.getElementById(`we-${code}-${type}`).style.display = 'none';
+  document.getElementById(`wd-${code}-${type}`).style.display = 'block';
+}
+function addWeightRow(code, type) {
+  const rows = document.querySelector(`#we-${code}-${type} .wr-rows`);
+  const d = document.createElement('div');
+  d.className = 'wr-row';
+  d.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:6px';
+  d.innerHTML = `<input class="wk" placeholder="รหัส เช่น US" style="flex:1;padding:5px 8px;border:1px solid var(--line);border-radius:6px;font-size:12px;background:var(--card);color:var(--fg)">
+    <input class="wv" type="number" min="-100" max="100" step="0.1" placeholder="%" style="width:72px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;font-size:12px;background:var(--card);color:var(--fg)">
+    <button onclick="this.parentElement.remove()" style="padding:4px 7px;border:none;background:var(--line);border-radius:6px;cursor:pointer;font-size:13px;color:var(--muted)">✕</button>`;
+  rows.appendChild(d);
+}
+function saveWeightEditor(code, type) {
+  const rows = document.querySelectorAll(`#we-${code}-${type} .wr-row`);
+  const items = [];
+  rows.forEach(r => {
+    const k = r.querySelector('.wk').value.trim().toUpperCase();
+    const v = parseFloat(r.querySelector('.wv').value);
+    if (k && !isNaN(v)) items.push({ key: k, pct: v });
+  });
+  const meta = HMETA[code];
+  if (meta && items.length) {
+    const str = items.map(i => `${i.key}:${i.pct}`).join('/');
+    if (type === 'market') meta.marketWeight = str;
+    else meta.sectorWeight = str;
+  }
+  closeWeightEditor(code, type);
+  renderModel();
+}
+
+function renderWeightSection(code, type, str, colors, labelMap, title) {
+  const items = parseWeightStr(str);
+  const rowsHtml = items.map(i => `
+    <div class="wr-row" style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+      <input class="wk" value="${i.key}" style="flex:1;padding:5px 8px;border:1px solid var(--line);border-radius:6px;font-size:12px;background:var(--card);color:var(--fg)">
+      <input class="wv" type="number" min="-100" max="100" step="0.1" value="${i.pct}" style="width:72px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;font-size:12px;background:var(--card);color:var(--fg)">
+      <button onclick="this.parentElement.remove()" style="padding:4px 7px;border:none;background:var(--line);border-radius:6px;cursor:pointer;font-size:13px;color:var(--muted)">✕</button>
+    </div>`).join('');
+
+  return `<div style="grid-column:1/-1">
+    <div id="wd-${code}-${type}">
+      <div class="dl" style="margin-bottom:2px;display:flex;align-items:center;gap:8px">
+        ${title}
+        <button onclick="openWeightEditor('${code}','${type}')"
+          style="margin-left:auto;padding:3px 10px;border:1px solid var(--line);background:transparent;border-radius:999px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer">✏️ แก้ไข</button>
+      </div>
+      ${renderStackedBarFromItems(items, colors, labelMap)}
+    </div>
+    <div id="we-${code}-${type}" style="display:none">
+      <div class="dl" style="margin-bottom:10px;display:flex;align-items:center;gap:8px">
+        ${title} <span style="font-size:11px;color:var(--green);font-weight:700">✏️ กำลังแก้ไข</span>
+      </div>
+      <div class="wr-rows">${rowsHtml}</div>
+      <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+        <button onclick="addWeightRow('${code}','${type}')"
+          style="padding:5px 12px;border:1px dashed var(--line);background:transparent;border-radius:6px;font-size:12px;color:var(--muted);cursor:pointer">＋ เพิ่มรายการ</button>
+        <button onclick="saveWeightEditor('${code}','${type}')"
+          style="padding:5px 14px;border:none;background:var(--green);color:#fff;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer">บันทึก</button>
+        <button onclick="closeWeightEditor('${code}','${type}')"
+          style="padding:5px 12px;border:1px solid var(--line);background:transparent;border-radius:6px;font-size:12px;color:var(--muted);cursor:pointer">ยกเลิก</button>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:var(--faint)">รหัสตัวอย่าง: US, TH, JP, CN, EU, IT, FC, CD, HC, IN — ตรงกับ label ในแผนภูมิ</div>
+    </div>
+  </div>`;
+}
+
 // Aggregate market + sector weights across all model funds (weighted by portfolio %)
 function computePortWeights() {
   const mMap = {}, sMap = {};
@@ -558,6 +929,25 @@ function computePortWeights() {
   return { market: toItems(mMap), sector: toItems(sMap) };
 }
 
+// ============================================================
+// FACTSHEET — live performance/fee from SEC API v2
+// ============================================================
+const fsCache = {};
+async function fetchLiveFactsheet(code) {
+  if (fsCache[code] !== undefined) return fsCache[code];
+  fsCache[code] = null;
+  try {
+    const url = _isNetlify ? `/api/factsheet?fund=${encodeURIComponent(code)}` : `http://localhost:3001/factsheet/${encodeURIComponent(code)}`;
+    const res = await fetch(url);
+    if (res.ok) { fsCache[code] = await res.json(); }
+  } catch(e) {}
+  return fsCache[code];
+}
+async function loadAndRenderFactsheet(code) {
+  await fetchLiveFactsheet(code);
+  if (modelExpanded.has(code)) renderModel();
+}
+
 // Fund links — SEC market page & Finnomena
 const FUND_PROJ_ID = {
   'TISCOHD-A':'M0081_2555','SCBWORLD(A)':'M0465_2564',
@@ -575,7 +965,8 @@ function getFinnomenaLink(code) {
 // ============================================================
 // NAV FETCHING — SEC Thailand API
 // ============================================================
-let currentMode = localStorage.getItem('navMode') || 'local';
+const _isNetlify = location.hostname !== 'localhost' && location.hostname !== '127.0.0.1';
+let currentMode = _isNetlify ? 'netlify' : (localStorage.getItem('navMode') || 'local');
 const navCache = {};
 function setMode(mode){ currentMode = mode; localStorage.setItem('navMode', mode); document.getElementById('mode-local').classList.toggle('active', mode==='local'); document.getElementById('mode-netlify').classList.toggle('active', mode==='netlify'); Object.keys(navCache).forEach(k=>delete navCache[k]); refreshAll(); }
 function getNavUrl(secName){ return currentMode==='netlify' ? `/api/nav?fund=${encodeURIComponent(secName)}` : `http://localhost:3001/${encodeURIComponent(secName)}`; }
@@ -855,10 +1246,44 @@ function renderModelMetrics(){
   const svg=`<svg viewBox="-58 0 376 250" style="width:100%;max-width:330px;display:block;margin:0 auto"><defs><linearGradient id="radg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3f6b58" stop-opacity="0.5"></stop><stop offset="1" stop-color="#6f9e87" stop-opacity="0.3"></stop></linearGradient></defs>${rings}${axes}${bench}${fill}${dots}${labels}</svg>`;
   const style=m.passiveW<0.4?'\u0e40\u0e2d\u0e19\u0e2a\u0e32\u0e22 Active':m.passiveW>0.6?'\u0e40\u0e2d\u0e19\u0e2a\u0e32\u0e22 Passive':'\u0e1c\u0e2a\u0e21';
   const rows=items.map(i=>`<div style="display:flex;align-items:center;gap:12px"><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:700">${i.name}</div><div style="font-size:11px;color:#7a877f">${i.sub}</div></div>${ratePill(i.r)}</div>`).join('');
+
+  // Correlation matrix
+  const corrFunds = modelFunds();
+  const fn = corrFunds.length;
+  const cellSz = Math.min(56, Math.floor(280 / (fn + 1)));
+  const shortName = f => (f.meta.name || f.code).split(/[\s(]/)[0].slice(0, 7);
+  let corrHeader = `<div style="display:grid;grid-template-columns:80px ${Array(fn).fill(`${cellSz}px`).join(' ')};gap:2px;align-items:center;margin-bottom:2px">`;
+  corrHeader += `<div></div>`;
+  corrFunds.forEach(f => { corrHeader += `<div style="font-size:9px;font-weight:700;color:var(--muted);text-align:center;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${shortName(f)}</div>`; });
+  corrHeader += '</div>';
+  let corrRows = '';
+  corrFunds.forEach((fi, ci) => {
+    corrRows += `<div style="display:grid;grid-template-columns:80px ${Array(fn).fill(`${cellSz}px`).join(' ')};gap:2px;align-items:center;margin-bottom:2px">`;
+    corrRows += `<div style="font-size:9px;font-weight:700;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${shortName(fi)}</div>`;
+    corrFunds.forEach((fj, cj) => {
+      const v = getCorr(fi.code, fj.code);
+      const bg = corrColor(v);
+      const isDiag = ci === cj;
+      corrRows += `<div style="height:${cellSz}px;border-radius:6px;background:${isDiag?'var(--line)':bg};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:${isDiag?'var(--muted)':'#fff'}">${isDiag?'\u2014':v.toFixed(2)}</div>`;
+    });
+    corrRows += '</div>';
+  });
+
+  // weighted-average off-diagonal correlation
+  let wCorrSum = 0, wCorrN = 0;
+  for (let ci = 0; ci < fn; ci++) for (let cj = ci+1; cj < fn; cj++) {
+    wCorrSum += getCorr(corrFunds[ci].code, corrFunds[cj].code);
+    wCorrN++;
+  }
+  const avgCorr = wCorrN ? wCorrSum / wCorrN : 0;
+  const corrLevel = avgCorr < 0.45 ? { lbl:'\u0e15\u0e48\u0e33 \u2014 \u0e01\u0e23\u0e30\u0e08\u0e32\u0e22\u0e04\u0e27\u0e32\u0e21\u0e40\u0e2a\u0e35\u0e48\u0e22\u0e07\u0e14\u0e35\u0e21\u0e32\u0e01', col:'#16a34a' }
+                  : avgCorr < 0.65 ? { lbl:'\u0e1b\u0e32\u0e19\u0e01\u0e25\u0e32\u0e07 \u2014 \u0e01\u0e23\u0e30\u0e08\u0e32\u0e22\u0e04\u0e27\u0e32\u0e21\u0e40\u0e2a\u0e35\u0e48\u0e22\u0e07\u0e14\u0e35', col:'#ca8a04' }
+                  : { lbl:'\u0e2a\u0e39\u0e07 \u2014 \u0e04\u0e27\u0e23\u0e01\u0e23\u0e30\u0e08\u0e32\u0e22\u0e40\u0e1e\u0e34\u0e48\u0e21', col:'#dc2626' };
+
   box.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:4px">
       <h3 style="font-size:20px;font-weight:800;color:#3f6b58">\u0e04\u0e30\u0e41\u0e19\u0e19\u0e1e\u0e25\u0e31\u0e07\u0e02\u0e2d\u0e07\u0e1e\u0e2d\u0e23\u0e4c\u0e15</h3>
-      <span style="font-size:12px;color:#9aa49d">\u2011 \u2011 \u2011 \u0e40\u0e2a\u0e49\u0e19\u0e1b\u0e23\u0e30 \u0e04\u0e37\u0e2d \u0e40\u0e01\u0e13\u0e11\u0e4c\u0e40\u0e09\u0e25\u0e35\u0e48\u0e22\u0e15\u0e25\u0e32\u0e14</span>
+      <span style="font-size:12px;color:#9aa49d">\u2014 \u2014 \u2014 \u0e40\u0e2a\u0e49\u0e19\u0e1b\u0e23\u0e30 \u0e04\u0e37\u0e2d \u0e40\u0e01\u0e13\u0e11\u0e4c\u0e40\u0e09\u0e25\u0e35\u0e48\u0e22\u0e15\u0e25\u0e32\u0e14</span>
     </div>
     <p style="font-size:12px;color:#7a877f;margin-bottom:14px">\u0e1b\u0e23\u0e30\u0e40\u0e21\u0e34\u0e19\u0e08\u0e32\u0e01\u0e1c\u0e25\u0e15\u0e2d\u0e1a\u0e41\u0e17\u0e19\u0e41\u0e25\u0e30\u0e04\u0e27\u0e32\u0e21\u0e1c\u0e31\u0e19\u0e1c\u0e27\u0e19\u0e22\u0e49\u0e2d\u0e19\u0e2b\u0e25\u0e31\u0e07 5 \u0e1b\u0e35\u0e02\u0e2d\u0e07\u0e41\u0e15\u0e48\u0e25\u0e30\u0e01\u0e2d\u0e07 \u0e16\u0e48\u0e27\u0e07\u0e19\u0e49\u0e33\u0e2b\u0e19\u0e31\u0e01\u0e15\u0e32\u0e21\u0e2a\u0e31\u0e14\u0e2a\u0e48\u0e27\u0e19\u0e1e\u0e2d\u0e23\u0e4c\u0e15</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;align-items:center">
@@ -869,6 +1294,35 @@ function renderModelMetrics(){
           <div style="display:flex;height:8px;border-radius:9999px;overflow:hidden"><div style="width:${((1-m.passiveW)*100).toFixed(0)}%;background:#3f6b58"></div><div style="width:${(m.passiveW*100).toFixed(0)}%;background:#cdbd9a"></div></div>
           <div style="display:flex;justify-content:space-between;font-size:11px;color:#7a877f;margin-top:5px"><span>Active ${((1-m.passiveW)*100).toFixed(0)}%</span><span>Passive ${(m.passiveW*100).toFixed(0)}%</span></div>
         </div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid var(--line);margin-top:24px;padding-top:22px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+        <div style="font-size:16px;font-weight:800;color:#3f6b58">Correlation Matrix</div>
+        <div style="font-size:12px;color:var(--muted)">\u0e04\u0e48\u0e32\u0e2a\u0e2b\u0e2a\u0e31\u0e21\u0e1e\u0e31\u0e19\u0e18\u0e4c\u0e23\u0e30\u0e2b\u0e27\u0e48\u0e32\u0e07\u0e01\u0e2d\u0e07\u0e17\u0e38\u0e19 <span style="font-size:10px">(\u0e1b\u0e23\u0e30\u0e21\u0e32\u0e13\u0e01\u0e32\u0e23\u0e08\u0e32\u0e01 asset class)</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <div style="font-size:13px;font-weight:700;color:var(--fg)">\u0e04\u0e48\u0e32\u0e40\u0e09\u0e25\u0e35\u0e48\u0e22:</div>
+        <div style="font-size:18px;font-weight:900;color:${corrLevel.col}">${avgCorr.toFixed(2)}</div>
+        <div style="font-size:12px;color:${corrLevel.col};font-weight:700">${corrLevel.lbl}</div>
+        <div style="flex:1"></div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted)">
+          <div style="display:flex;gap:2px">
+            <div style="width:16px;height:10px;border-radius:3px;background:hsl(120,55%,48%)"></div>
+            <div style="width:16px;height:10px;border-radius:3px;background:hsl(80,55%,48%)"></div>
+            <div style="width:16px;height:10px;border-radius:3px;background:hsl(40,55%,48%)"></div>
+            <div style="width:16px;height:10px;border-radius:3px;background:hsl(0,55%,48%)"></div>
+          </div>
+          \u0e15\u0e48\u0e33 \u2192 \u0e2a\u0e39\u0e07
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        ${corrHeader}${corrRows}
+      </div>
+      <div style="margin-top:14px;font-size:11px;color:var(--muted);line-height:1.6">
+        \ud83d\udca1 \u0e04\u0e48\u0e32 Correlation \u0e43\u0e01\u0e25\u0e49 <strong>0</strong> = \u0e40\u0e04\u0e25\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e2b\u0e27\u0e2d\u0e34\u0e2a\u0e23\u0e30 \u0e0a\u0e48\u0e27\u0e22\u0e01\u0e23\u0e30\u0e08\u0e32\u0e22\u0e04\u0e27\u0e32\u0e21\u0e40\u0e2a\u0e35\u0e48\u0e22\u0e07\u0e44\u0e14\u0e49\u0e14\u0e35 \u00b7 \u0e43\u0e01\u0e25\u0e49 <strong>1</strong> = \u0e40\u0e04\u0e25\u0e37\u0e48\u0e2d\u0e19\u0e44\u0e2b\u0e27\u0e44\u0e1b\u0e17\u0e34\u0e28\u0e17\u0e32\u0e07\u0e40\u0e14\u0e35\u0e22\u0e27\u0e01\u0e31\u0e19 \u0e01\u0e23\u0e30\u0e08\u0e32\u0e22\u0e04\u0e27\u0e32\u0e21\u0e40\u0e2a\u0e35\u0e48\u0e22\u0e07\u0e44\u0e14\u0e49\u0e19\u0e49\u0e2d\u0e22<br>
+        \u26a0\ufe0f \u0e04\u0e48\u0e32\u0e19\u0e35\u0e49\u0e40\u0e1b\u0e47\u0e19\u0e1b\u0e23\u0e30\u0e21\u0e32\u0e13\u0e01\u0e32\u0e23\u0e08\u0e32\u0e01 asset class \u0e02\u0e2d\u0e07\u0e41\u0e15\u0e48\u0e25\u0e30\u0e01\u0e2d\u0e07 \u0e44\u0e21\u0e48\u0e43\u0e0a\u0e48\u0e01\u0e32\u0e23\u0e04\u0e33\u0e19\u0e27\u0e13\u0e08\u0e32\u0e01\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25 NAV \u0e08\u0e23\u0e34\u0e07
       </div>
     </div>`;
 }
@@ -913,17 +1367,223 @@ const FUND_STATS = {
   'SCBS&P500':  { ret:0.1310, sd:0.1600, src:'est'  },
 };
 const MODEL_RET = Object.fromEntries(Object.entries(FUND_STATS).map(([k,v])=>[k,v.ret]));
+
+// Estimated pairwise correlation matrix (symmetric, diagonal=1)
+// Based on asset class overlap: TH Dividend vs Global ~0.35, US vs Global ~0.85
+const FUND_CORR = {
+  'TISCOHD-A':  { 'TISCOHD-A':1.00, 'ONE-UGG-RA':0.35, 'SCBWORLD(A)':0.40, 'KKP GNP':0.38, 'SCBS&P500':0.33 },
+  'ONE-UGG-RA': { 'TISCOHD-A':0.35, 'ONE-UGG-RA':1.00, 'SCBWORLD(A)':0.72, 'KKP GNP':0.70, 'SCBS&P500':0.65 },
+  'SCBWORLD(A)':{ 'TISCOHD-A':0.40, 'ONE-UGG-RA':0.72, 'SCBWORLD(A)':1.00, 'KKP GNP':0.88, 'SCBS&P500':0.85 },
+  'KKP GNP':    { 'TISCOHD-A':0.38, 'ONE-UGG-RA':0.70, 'SCBWORLD(A)':0.88, 'KKP GNP':1.00, 'SCBS&P500':0.82 },
+  'SCBS&P500':  { 'TISCOHD-A':0.33, 'ONE-UGG-RA':0.65, 'SCBWORLD(A)':0.85, 'KKP GNP':0.82, 'SCBS&P500':1.00 },
+};
+function getCorr(a, b) {
+  if (a === b) return 1;
+  return (FUND_CORR[a] && FUND_CORR[a][b] != null) ? FUND_CORR[a][b]
+       : (FUND_CORR[b] && FUND_CORR[b][a] != null) ? FUND_CORR[b][a]
+       : 0.6;
+}
+function corrColor(v) {
+  // 0→green, 0.5→yellow, 1→red (using HSL)
+  const h = Math.round((1 - v) * 120); // 120=green, 0=red
+  return `hsl(${h},55%,48%)`;
+}
+function corrTextColor(v) { return v > 0.6 ? '#fff' : '#fff'; }
+function avgPortCorr(funds) {
+  let sum = 0, n = 0;
+  for (let i = 0; i < funds.length; i++) for (let j = i+1; j < funds.length; j++) {
+    sum += getCorr(funds[i].code, funds[j].code) * funds[i].w * funds[j].w;
+    n++;
+  }
+  return n ? sum / (funds.reduce((s,f)=>s+f.w*f.w,0)/funds.length) : 0;
+}
 const MPAL = ['#3f6b58','#6f9e87','#9bbfb0','#cdbd9a','#e8a85c'];
 let modelBase = 1000000;
 let projMode = 'cagr';
 function setProjMode(m){ projMode=m; const a=document.getElementById('ptab-cagr'), b=document.getElementById('ptab-mc'); if(a)a.classList.toggle('active',m==='cagr'); if(b)b.classList.toggle('active',m==='mc'); renderModel(); }
 let modelExpanded = new Set();
+
+// ── Save / Load ────────────────────────────────────────────────────────────
+const SAVES_KEY = 'wealth24_model_saves';
+
+function getSaves() {
+  try { return JSON.parse(localStorage.getItem(SAVES_KEY) || '[]'); } catch { return []; }
+}
+function putSaves(arr) {
+  localStorage.setItem(SAVES_KEY, JSON.stringify(arr));
+}
+
+function captureSnapshot() {
+  const weights = {};
+  MODEL_ORDER.forEach(c => weights[c] = MODEL_WEIGHTS[c] || 0);
+  const meta = {};
+  MODEL_ORDER.forEach(c => {
+    const m = HMETA[c] || {};
+    meta[c] = { marketWeight: m.marketWeight || '', sectorWeight: m.sectorWeight || '' };
+  });
+  return { weights, meta, base: modelBase, order: [...MODEL_ORDER] };
+}
+
+function applySnapshot(snap) {
+  if (snap.order && Array.isArray(snap.order)) {
+    MODEL_ORDER.length = 0;
+    snap.order.forEach(c => {
+      if (!HMETA[c]) HMETA[c] = { name: c, code: c, zone: '', style: 'Active', manager: '', fee: 0, navStatic: 0 };
+      MODEL_ORDER.push(c);
+    });
+  }
+  if (snap.weights) MODEL_ORDER.forEach(c => { if (snap.weights[c] != null) MODEL_WEIGHTS[c] = snap.weights[c]; });
+  if (snap.meta) MODEL_ORDER.forEach(c => {
+    if (!snap.meta[c]) return;
+    const m = HMETA[c];
+    if (m) { if (snap.meta[c].marketWeight) m.marketWeight = snap.meta[c].marketWeight; if (snap.meta[c].sectorWeight) m.sectorWeight = snap.meta[c].sectorWeight; }
+  });
+  if (snap.base != null) { modelBase = snap.base; fmtBaseInput(); }
+  renderModel();
+}
+
+// ── Add / Remove / Edit Model Funds ────────────────────────────────────────
+async function addFundToModel(code, pct) {
+  code = code.trim().toUpperCase();
+  if (!code) return;
+  if (MODEL_ORDER.includes(code)) { alert(`${code} อยู่ในโมเดลแล้ว`); return; }
+  const w = (parseFloat(pct) || 0) / 100;
+  MODEL_ORDER.push(code);
+  MODEL_WEIGHTS[code] = w;
+  if (!HMETA[code]) HMETA[code] = { name: code, code, zone: '', style: 'Active', manager: '', fee: 0, navStatic: 0 };
+  renderModel();
+  // Fetch NAV + factsheet in background
+  const nav = await fetchNAV(code);
+  if (nav) liveNAVs[code] = nav;
+  renderModel();
+  loadAndRenderFactsheet(code);
+}
+
+function removeFundFromModel(code) {
+  if (!confirm(`ลบ ${code} ออกจากโมเดล?`)) return;
+  const idx = MODEL_ORDER.indexOf(code);
+  if (idx === -1) return;
+  MODEL_ORDER.splice(idx, 1);
+  delete MODEL_WEIGHTS[code];
+  modelExpanded.delete(code);
+  renderModel();
+}
+
+function updateModelWeight(code, pctStr) {
+  const v = parseFloat(pctStr);
+  if (isNaN(v) || v < 0) return;
+  MODEL_WEIGHTS[code] = v / 100;
+  renderModel();
+}
+
+function saveModelSnapshot() {
+  const nameEl = document.getElementById('save-name-input');
+  const name = (nameEl?.value || '').trim() || `Model ${new Date().toLocaleDateString('th-TH', { day:'2-digit', month:'short', year:'2-digit' })}`;
+  const saves = getSaves();
+  saves.unshift({ id: Date.now(), name, date: new Date().toISOString(), snap: captureSnapshot() });
+  putSaves(saves.slice(0, 50));
+  if (nameEl) nameEl.value = '';
+  renderSaveList();
+}
+
+function loadSave(id) {
+  const saves = getSaves();
+  const s = saves.find(x => x.id === id);
+  if (!s) return;
+  applySnapshot(s.snap);
+  closeSavePanel();
+}
+
+function deleteSave(id) {
+  if (!confirm('ลบ snapshot นี้?')) return;
+  putSaves(getSaves().filter(x => x.id !== id));
+  renderSaveList();
+}
+
+function renameSave(id) {
+  const saves = getSaves();
+  const s = saves.find(x => x.id === id);
+  if (!s) return;
+  const newName = prompt('ชื่อใหม่:', s.name);
+  if (newName && newName.trim()) { s.name = newName.trim(); putSaves(saves); renderSaveList(); }
+}
+
+function renderSaveList() {
+  const el = document.getElementById('save-list');
+  if (!el) return;
+  const saves = getSaves();
+  if (!saves.length) {
+    el.innerHTML = '<div style="color:var(--faint);font-size:13px;padding:8px 0">ยังไม่มี snapshot ที่บันทึกไว้</div>';
+    return;
+  }
+  el.innerHTML = saves.map(s => {
+    const d = new Date(s.date).toLocaleString('th-TH', { day:'2-digit', month:'short', year:'2-digit', hour:'2-digit', minute:'2-digit' });
+    const weights = s.snap?.weights || {};
+    const preview = MODEL_ORDER.filter(c => weights[c]).map(c => `${c.split('-')[0].split('(')[0]} ${((weights[c]||0)*100).toFixed(0)}%`).join(' · ');
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;flex-wrap:wrap">
+      <div style="flex:1;min-width:160px">
+        <div style="font-size:14px;font-weight:800">${s.name}</div>
+        <div style="font-size:11px;color:var(--faint);margin-top:2px">${d}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4">${preview}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        <button onclick="loadSave(${s.id})"
+          style="padding:6px 12px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">โหลด</button>
+        <button onclick="renameSave(${s.id})"
+          style="padding:6px 10px;border:1px solid var(--line);background:transparent;border-radius:8px;font-size:12px;cursor:pointer;color:var(--muted)">✏️</button>
+        <button onclick="deleteSave(${s.id})"
+          style="padding:6px 10px;border:1px solid rgba(220,38,38,0.3);background:transparent;border-radius:8px;font-size:12px;cursor:pointer;color:var(--red)">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openSavePanel() {
+  const el = document.getElementById('save-panel');
+  if (!el) return;
+  el.style.display = 'block';
+  renderSaveList();
+  document.getElementById('save-name-input')?.focus();
+}
+function closeSavePanel() {
+  const el = document.getElementById('save-panel');
+  if (el) el.style.display = 'none';
+}
+
+function exportSaves() {
+  const saves = getSaves();
+  const blob = new Blob([JSON.stringify(saves, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `wealth24-saves-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+function importSaves(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error('invalid');
+      const existing = getSaves();
+      const existingIds = new Set(existing.map(x => x.id));
+      const merged = [...data.filter(x => !existingIds.has(x.id)), ...existing];
+      putSaves(merged.slice(0, 50));
+      renderSaveList();
+      alert(`นำเข้าสำเร็จ ${data.length} snapshots`);
+    } catch { alert('ไฟล์ไม่ถูกต้อง'); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
 function setModelBase(v){ modelBase = Math.max(0, +v||0); fmtBaseInput(); renderModel(); }
 function onBaseInput(el){ const n = parseFloat((el.value||'').replace(/[^0-9.]/g,'')); modelBase = isNaN(n)?0:n; renderModelCalc(); }
 function fmtBaseInput(){ const el=document.getElementById('model-base-input'); if(el) el.value = modelBase.toLocaleString('th-TH'); }
 function toggleModelFund(code){
   if(modelExpanded.has(code)) modelExpanded.delete(code);
-  else { modelExpanded.add(code); }
+  else { modelExpanded.add(code); loadAndRenderFactsheet(code); }
   renderModel();
 }
 function modelFunds(){
@@ -968,38 +1628,87 @@ function renderModel(){
       </div>
     </div>`;
 
-  document.getElementById('model-groups').innerHTML = funds.map(f=>{
+  document.getElementById('model-groups').innerHTML = (funds.map(f=>{
     const open = modelExpanded.has(f.code);
     const live = f.nd && f.nd.source==='sec-api';
+    const fs = fsCache[f.code] || null;
+    const liveRet = fs && fs.ret1y != null ? fs.ret1y : null;
+    const liveFee = fs && fs.fee != null ? fs.fee : null;
+    const dispRet = liveRet ?? f.ret;
+    const dispFee = liveFee ?? f.meta.fee;
+    const retLive = liveRet != null;
+    const feeLive = liveFee != null;
+    const fsLoading = open && fs === null && !(f.code in fsCache);
     const detail = open ? `<div class="model-detail">
       <div><div class="dl">เงินลงทุนตามสัดส่วน</div><div class="dv tabular">${fmtB(f.amount)} <span style="font-size:11px;color:var(--muted);font-weight:600">(${(f.w*100).toFixed(1)}%)</span></div></div>
       <div><div class="dl">NAV ล่าสุด</div><div class="dv tabular">${fmt(f.nav,4)} <span style="font-size:10px;color:${live?'var(--green)':'var(--faint)'}">${live?'●LIVE':'●เดิม'}</span></div></div>
       <div><div class="dl">จำนวนหน่วยโดยประมาณ</div><div class="dv tabular">${fmt(f.units,4)}</div></div>
       <div><div class="dl">วันที่ NAV</div><div class="dv">${(f.nd?f.nd.date:f.meta.navDate)||'—'}</div></div>
       <div><div class="dl">ประเภท / สไตล์</div><div class="dv">${f.meta.zone||'—'} · ${f.meta.style||'—'}</div></div>
-      <div><div class="dl">ค่าธรรมเนียม</div><div class="dv">${f.meta.fee!=null?(f.meta.fee*100).toFixed(2)+'%/ปี':'—'}</div></div>
-      <div><div class="dl">ผลตอบแทนเฉลี่ยต่อปี (อดีต)</div><div class="dv" style="color:#1f8a5b">${signPctStr(f.ret*100)} <span style="font-size:10px;font-weight:700;color:${f.src==='real'?'#1f8a5b':'#9aa49d'}">${f.src==='real'?'●จริง':'○ประมาณ'}</span></div></div>
+      <div><div class="dl">ค่าธรรมเนียม</div><div class="dv">${dispFee!=null?(dispFee*100).toFixed(2)+'%/ปี':'—'} <span style="font-size:10px;font-weight:700;color:${feeLive?'var(--green)':'var(--faint)'}">${feeLive?'●LIVE':fs===null&&open?'':'○เดิม'}</span>${fs&&fs.fee_date?`<span style="font-size:10px;color:var(--faint);margin-left:4px">${fs.fee_date.slice(0,7)}</span>`:''}</div></div>
+      <div><div class="dl">ผลตอบแทนเฉลี่ยต่อปี (อดีต)</div><div class="dv" style="color:#1f8a5b">${signPctStr(dispRet*100)} <span style="font-size:10px;font-weight:700;color:${retLive?'var(--green)':'#9aa49d'}">${retLive?'●LIVE':'○เดิม'}</span>${fs&&fs.ret1y_date?`<span style="font-size:10px;color:var(--faint);margin-left:4px">${fs.ret1y_date.slice(0,7)}</span>`:''}</div></div>
       <div><div class="dl">ความผันผวน (SD)</div><div class="dv">${(f.sd*100).toFixed(2)}%</div></div>
-      <div><div class="dl">มูลค่าคาดการณ์ใน 5 ปี</div><div class="dv tabular" style="color:#3f6b58">${fmtB(f.amount*Math.pow(1+f.ret,5))}</div></div>
+      ${fs&&fs.max_drawdown!=null?`<div><div class="dl">Max Drawdown</div><div class="dv" style="color:var(--red)">${fs.max_drawdown.toFixed(2)}% <span style="font-size:10px;font-weight:700;color:var(--green)">●LIVE</span>${fs.stat_date?`<span style="font-size:10px;color:var(--faint);margin-left:4px">${fs.stat_date.slice(0,7)}</span>`:''}</div></div>`:''}
+      ${fs&&fs.sharpe!=null?`<div><div class="dl">Sharpe Ratio</div><div class="dv">${fs.sharpe.toFixed(2)} <span style="font-size:10px;font-weight:700;color:var(--green)">●LIVE</span>${fs.stat_date?`<span style="font-size:10px;color:var(--faint);margin-left:4px">${fs.stat_date.slice(0,7)}</span>`:''}</div></div>`:''}
+      <div><div class="dl">มูลค่าคาดการณ์ใน 5 ปี</div><div class="dv tabular" style="color:#3f6b58">${fmtB(f.amount*Math.pow(1+dispRet,5))}</div></div>
       <div style="grid-column:1/-1"><div class="dl">กองทุนหลัก (Master Fund)</div><div class="dv" style="font-weight:600;font-size:13px">${f.meta.masterFund||'—'}</div></div>
+      ${fs&&fs.benchmark?`<div style="grid-column:1/-1"><div class="dl">ดัชนีชี้วัด (Benchmark) <span style="font-size:10px;font-weight:700;color:var(--green)">●LIVE</span>${fs.bench_date?`<span style="font-size:10px;color:var(--faint);margin-left:4px">${fs.bench_date.slice(0,7)}</span>`:''}</div><div class="dv" style="font-size:13px;color:var(--muted)">${fs.benchmark}</div></div>`:`<div style="grid-column:1/-1"><div class="dl">ดัชนีชี้วัด (Benchmark)</div><div class="dv" style="font-size:13px;color:var(--muted)">${f.meta.bench||'—'}</div></div>`}
 
-      <div style="grid-column:1/-1">
-        <div class="dl" style="margin-bottom:2px">🌍 สัดส่วนตลาด (Geographic Weight)</div>
-        ${renderStackedBar(f.meta.marketWeight, MARKET_COLORS, MARKET_LABELS)}
-      </div>
-      <div style="grid-column:1/-1">
-        <div class="dl" style="margin-bottom:2px">📊 สัดส่วนหมวดอุตสาหกรรม (Sector Weight)</div>
-        ${renderStackedBar(f.meta.sectorWeight, SECTOR_COLORS, SECTOR_LABELS)}
-      </div>
+      ${renderWeightSection(f.code, 'market', f.meta.marketWeight, MARKET_COLORS, MARKET_LABELS, '🌍 สัดส่วนตลาด (Geographic Weight)')}
+      ${renderWeightSection(f.code, 'sector', f.meta.sectorWeight, SECTOR_COLORS, SECTOR_LABELS, '📊 สัดส่วนหมวดอุตสาหกรรม (Sector Weight)')}
+
+      ${fs&&fs.alloc&&fs.alloc.length?`<div style="grid-column:1/-1;border-top:1px solid var(--line);padding-top:14px;margin-top:4px">
+        <div class="dl" style="margin-bottom:8px">📊 สัดส่วนประเภททรัพย์สิน <span style="font-size:10px;font-weight:700;color:var(--green)">●LIVE</span>${fs.alloc_date?`<span style="font-size:10px;color:var(--faint);margin-left:4px">${fs.alloc_date.slice(0,7)}</span>`:''}</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          ${fs.alloc.map(a=>`<div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <div style="width:100px;color:var(--muted);flex-shrink:0">${a.name}</div>
+            <div style="flex:1;background:var(--line);border-radius:4px;height:8px;overflow:hidden"><div style="height:100%;border-radius:4px;background:${a.ratio>=0?'var(--green)':'var(--red)'};width:${Math.min(Math.abs(a.ratio),100)}%"></div></div>
+            <div style="width:52px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums;color:${a.ratio<0?'var(--red)':'inherit'}">${a.ratio.toFixed(2)}%</div>
+          </div>`).join('')}
+        </div>
+      </div>`:''}
+
+      ${fs&&fs.top5&&fs.top5.length?`<div style="grid-column:1/-1;border-top:1px solid var(--line);padding-top:14px;margin-top:4px">
+        <div class="dl" style="margin-bottom:8px">🏆 ทรัพย์สินที่ลงทุน 5 อันดับแรก <span style="font-size:10px;font-weight:700;color:var(--green)">●LIVE</span>${fs.top5_date?`<span style="font-size:10px;color:var(--faint);margin-left:4px">${fs.top5_date.slice(0,7)}</span>`:''}</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          ${fs.top5.map((h,i)=>`<div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <div style="width:14px;color:var(--faint);font-weight:700;text-align:right;flex-shrink:0">${i+1}</div>
+            <div style="flex:1;color:var(--fg);line-height:1.3">${h.name}</div>
+            <div style="width:48px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums;flex-shrink:0">${h.ratio.toFixed(2)}%</div>
+          </div>`).join('')}
+        </div>
+      </div>`:''}
+
+      ${fs&&fs.dividends&&fs.dividends.length?`<div style="grid-column:1/-1;border-top:1px solid var(--line);padding-top:14px;margin-top:4px">
+        <div class="dl" style="margin-bottom:8px">💰 ประวัติเงินปันผล (ล่าสุด) <span style="font-size:10px;font-weight:700;color:var(--green)">●LIVE</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          ${fs.dividends.map(d=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid var(--line)">
+            <span style="color:var(--muted)">${d.date.slice(0,10)}</span>
+            <span style="font-weight:700;color:#b45309">${d.value.toFixed(4)} บ./หน่วย</span>
+          </div>`).join('')}
+        </div>
+      </div>`:''}
 
       <div style="grid-column:1/-1;border-top:1px solid var(--line);padding-top:14px;margin-top:4px">
-        <div class="dl" style="margin-bottom:10px">📄 Fund Factsheet</div>
+        <div class="dl" style="margin-bottom:10px">📄 Fund Factsheet ${fs&&fs.pdf_url?`<span style="font-size:10px;font-weight:700;color:var(--green)">●LIVE</span>${fs.url_date?`<span style="font-size:10px;color:var(--faint);margin-left:4px">ข้อมูล ${fs.url_date.slice(0,7)}</span>`:''}`:''}
+        </div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          ${getSecLink(f.code) ? `<a href="${getSecLink(f.code)}" target="_blank" rel="noopener"
+          ${fs&&fs.pdf_url ? `<a href="${fs.pdf_url}" target="_blank" rel="noopener"
+            style="display:inline-flex;align-items:center;gap:6px;background:rgba(220,38,38,0.1);color:#dc2626;border:1px solid rgba(220,38,38,0.25);border-radius:9999px;padding:7px 14px;font-size:12px;font-weight:700;text-decoration:none;transition:all .15s"
+            onmouseover="this.style.background='rgba(220,38,38,0.18)'" onmouseout="this.style.background='rgba(220,38,38,0.1)'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            PDF (SEC)
+          </a>` : getSecLink(f.code) ? `<a href="${getSecLink(f.code)}" target="_blank" rel="noopener"
             style="display:inline-flex;align-items:center;gap:6px;background:rgba(42,111,219,0.1);color:#2a6fdb;border:1px solid rgba(42,111,219,0.25);border-radius:9999px;padding:7px 14px;font-size:12px;font-weight:700;text-decoration:none;transition:all .15s"
             onmouseover="this.style.background='rgba(42,111,219,0.18)'" onmouseout="this.style.background='rgba(42,111,219,0.1)'">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
             SEC
+          </a>` : ''}
+          ${fs&&fs.amc_url ? `<a href="${fs.amc_url}" target="_blank" rel="noopener"
+            style="display:inline-flex;align-items:center;gap:6px;background:rgba(42,111,219,0.1);color:#2a6fdb;border:1px solid rgba(42,111,219,0.25);border-radius:9999px;padding:7px 14px;font-size:12px;font-weight:700;text-decoration:none;transition:all .15s"
+            onmouseover="this.style.background='rgba(42,111,219,0.18)'" onmouseout="this.style.background='rgba(42,111,219,0.1)'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            เว็บ AMC
           </a>` : ''}
           <a href="${getFinnomenaLink(f.code)}" target="_blank" rel="noopener"
             style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,94,58,0.1);color:#e04a20;border:1px solid rgba(255,94,58,0.25);border-radius:9999px;padding:7px 14px;font-size:12px;font-weight:700;text-decoration:none;transition:all .15s"
@@ -1013,12 +1722,33 @@ function renderModel(){
     return `<div class="model-fund ${open?'open':''}">
       <div class="model-fund-row" onclick="toggleModelFund('${f.code}')">
         <span style="width:11px;height:11px;border-radius:9999px;flex-shrink:0;background:${f.color}"></span>
-        <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:800">${f.meta.name}</div><div style="font-size:11px;color:var(--muted)">${f.meta.manager||''} · ${f.meta.cat||f.meta.zone||''}</div></div>
-        <div style="text-align:right"><div style="font-size:15px;font-weight:800;font-variant-numeric:tabular-nums">${fmtB(f.amount)}</div><div style="font-size:12px;font-weight:700;color:#3f6b58">${(f.w*100).toFixed(1)}%</div></div>
+        <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:800">${f.meta.name||f.code}</div><div style="font-size:11px;color:var(--muted)">${f.meta.manager||''} · ${f.meta.cat||f.meta.zone||''}</div></div>
+        <div style="text-align:right"><div style="font-size:15px;font-weight:800;font-variant-numeric:tabular-nums">${fmtB(f.amount)}</div>
+          <div style="display:flex;align-items:center;justify-content:flex-end;gap:4px">
+            <input type="number" min="0" max="100" step="0.1" value="${(f.w*100).toFixed(1)}"
+              style="width:58px;font-size:12px;font-weight:700;color:#3f6b58;background:transparent;border:1px solid var(--line);border-radius:6px;padding:2px 4px;text-align:right;font-variant-numeric:tabular-nums"
+              onclick="event.stopPropagation()"
+              onchange="updateModelWeight('${f.code}',this.value)"
+              onkeydown="if(event.key==='Enter'){updateModelWeight('${f.code}',this.value);this.blur();}event.stopPropagation()">
+            <span style="font-size:12px;color:#3f6b58;font-weight:700">%</span>
+            <button onclick="event.stopPropagation();removeFundFromModel('${f.code}')"
+              style="border:none;background:none;color:var(--red,#dc2626);font-size:16px;cursor:pointer;padding:0 2px;line-height:1;opacity:0.7" title="ลบกองทุน">✕</button>
+          </div>
+        </div>
         <span class="model-chev">›</span>
       </div>${detail}
     </div>`;
-  }).join('');
+  }).join('') + `<div style="margin-top:16px;padding:16px;border:1.5px dashed var(--line);border-radius:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+    <span style="font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0">+ เพิ่มกองทุน</span>
+    <input id="add-fund-code" type="text" placeholder="รหัสกองทุน เช่น K-CASH"
+      style="flex:1;min-width:140px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;background:var(--card)"
+      onkeydown="if(event.key==='Enter')document.getElementById('add-fund-pct').focus()">
+    <input id="add-fund-pct" type="number" min="0" max="100" step="0.1" placeholder="% เช่น 10"
+      style="width:90px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;background:var(--card)"
+      onkeydown="if(event.key==='Enter'){const c=document.getElementById('add-fund-code').value;addFundToModel(c,this.value);document.getElementById('add-fund-code').value='';this.value='';}">
+    <button onclick="const c=document.getElementById('add-fund-code').value,p=document.getElementById('add-fund-pct').value;addFundToModel(c,p);document.getElementById('add-fund-code').value='';document.getElementById('add-fund-pct').value=''"
+      style="background:#3f6b58;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer">เพิ่ม</button>
+  </div>`);
 
   // projection by horizon — two modes
   const projEl = document.getElementById('model-projection');
@@ -1111,9 +1841,27 @@ function toggleWatch(code){
 // FUND TRACKER
 // ============================================================
 let trackerNAVs = [];
+let trackerPerfLoaded = false;
+async function loadTrackerPerf() {
+  if (trackerPerfLoaded) return;
+  trackerPerfLoaded = true;
+  const codes = TRACKER_FUNDS.map(f => f.code).join(',');
+  const url = _isNetlify ? `/api/factsheet?funds=${encodeURIComponent(codes)}` : null;
+  if (!url) return;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return;
+    const data = await res.json();
+    Object.entries(data).forEach(([code, info]) => {
+      if (info && info.perf) PERF_DATA[code] = info.perf;
+    });
+    renderTracker();
+  } catch(e) {}
+}
 async function renderTracker(){
   const tbody = document.getElementById('tracker-tbody');
   if (!trackerNAVs.length){ tbody.innerHTML = `<tr><td colspan="15" style="text-align:center;padding:32px;color:var(--muted)"><span class="spinner"></span> กำลังดึง NAV...</td></tr>`; trackerNAVs = await Promise.all(TRACKER_FUNDS.map(f=>fetchNAV(f.code))); }
+  if (!trackerPerfLoaded) loadTrackerPerf();
   tbody.innerHTML = TRACKER_FUNDS.map((f,i)=>{
     const nd=trackerNAVs[i]; const isLive=nd&&nd.source==='sec-api'; const perf=PERF_DATA[f.code]||{};
     const starred = state.watch.includes(f.code);
@@ -1280,8 +2028,8 @@ function openManage(){ closeMenu(); const p=loadProfiles(); const names=Object.k
 // ============================================================
 // NAV / SCREENS
 // ============================================================
-const SCREENS = [['model','Wealth 24 Model'],['core','Core Port'],['alpha','Alpha Port'],['watch','Watchlist'],['tracker','Fund Tracker']];
-let activeScreen = 'core';
+const SCREENS = [['philosophy','Philosophy'],['model','Wealth 24 Model'],['core','Core Port'],['alpha','Alpha Port'],['watch','Watchlist'],['tracker','Fund Tracker']];
+let activeScreen = 'model';
 function renderNav(){ document.getElementById('nav-menu').innerHTML = SCREENS.map(s=>`<button class="nav-btn ${activeScreen===s[0]?'active':''}" onclick="switchScreen('${s[0]}')">${s[1]}</button>`).join(''); }
 function switchScreen(name){
   activeScreen=name; renderNav();
